@@ -13,8 +13,8 @@ import SwiftyJSON
 
 // CLLocationManagerDelegate -> protocol for how my app will handle location data.
 // Therefore, my class is a sub-class of the UIViewController super-class, and conforms
-// to the rules delegated by the Core Location Manager Delegate.
-class WeatherViewController: UIViewController, CLLocationManagerDelegate  {
+// to the rules delegated by the CLLOcationManagerDelegate Protocol.
+class WeatherViewController: UIViewController, CLLocationManagerDelegate, ChangeCityDelegate  {
     
     //Constants
     let WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather"
@@ -84,11 +84,6 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate  {
         
     }
 
-    
-    
-    
-    
-    
     //MARK: - JSON Parsing
     /***************************************************************/
    
@@ -181,14 +176,21 @@ class WeatherViewController: UIViewController, CLLocationManagerDelegate  {
     
     
     //Write the userEnteredANewCityName Delegate method here:
-    
-
+    func userEnterANewCityName(city: String) {
+        
+        let params : [String : String] = ["q" : city, "appid" : APP_ID]
+        getWeatherData(url: WEATHER_URL, parameters: params)
+    }
     
     //Write the PrepareForSegue Method here
-    
-    
-    
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "changeCityName" {
+            
+            let destinationViewController = segue.destination as! ChangeCityViewController
+            
+            destinationViewController.delegate = self
+        }
+    }
     
 }
 
